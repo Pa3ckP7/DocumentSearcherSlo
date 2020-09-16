@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\Output\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Lucene.Net" Version="4.8.0-beta00011" />
+    <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00011" />
+    <PackageReference Include="Lucene.Net.Queries" Version="4.8.0-beta00011" />
+    <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00011" />
+  </ItemGroup>
+
+</Project>

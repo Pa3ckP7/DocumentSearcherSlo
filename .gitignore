@@ -1,0 +1,13 @@
+/LuceneSlo/obj/Debug/
+/Morfer/obj/Debug/
+/Output/Index/*
+/Output/documents/*
+/Output/*
+!/Output/documents
+!/Output/resources
+!/OutPut/index
+/Output/resources/
+/Searcher/obj/Debug/
+/LuceneSlo/obj/
+/Morfer/obj/
+/.vs/
