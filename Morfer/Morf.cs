@@ -25,7 +25,7 @@ namespace Morfer
                 }
             }
         }
-        public string Stemfy(string word)
+        public static string Stemify(string word)
         {
             if (Stems.TryGetValue(word, out var value))
             {

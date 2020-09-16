@@ -90,6 +90,7 @@ namespace Searcher
         }
         static void SearchFor(string searchquery)
         {
+            searchquery = Morf.Stemify(searchquery);
             string[] queries = searchquery.Split(' ');
             // search with a phrase
             Search = new MultiPhraseQuery();

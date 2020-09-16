@@ -15,4 +15,8 @@
     <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00011" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Morfer\Morfer.csproj" />
+  </ItemGroup>
+
 </Project>

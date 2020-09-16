@@ -39,6 +39,7 @@ namespace LuceneSlo
             TokenStream tok = new StandardFilter(m_matchVersion, src);
             tok = new LowerCaseFilter(m_matchVersion, tok);
             tok = new StopFilter(m_matchVersion, tok, m_stopwords);
+            tok = new SloveneLemmaFilter(tok);
             return new TokenStreamComponentsAnonymousInnerClassHelper(this, src, tok);
         }
         private class TokenStreamComponentsAnonymousInnerClassHelper : TokenStreamComponents
