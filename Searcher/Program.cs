@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lucene.Net.Documents;
 using System.IO;
+using Lucene.Net.Analysis.Util;
 
 namespace Searcher
 {
@@ -42,7 +43,13 @@ namespace Searcher
             var AppLuceneVersion = LuceneVersion.LUCENE_48;
             var indexLocation = Paths["indexDir"];
             var dir = FSDirectory.Open(indexLocation);
-            var analyzer = new SloveneAnalyzer(AppLuceneVersion);
+            String[] stopwords = ReadText(Paths["stopwords"]).Split('\n');
+            CharArraySet stopwords2 = new CharArraySet(AppLuceneVersion,0,true);
+            foreach (var stopword in stopwords) 
+            {
+                stopwords2.Add(stopword);
+            }
+            var analyzer = new SloveneAnalyzer(AppLuceneVersion, stopwords2);
             var indexConfig = new IndexWriterConfig(AppLuceneVersion, analyzer);
             Writer = new IndexWriter(dir, indexConfig);
         }

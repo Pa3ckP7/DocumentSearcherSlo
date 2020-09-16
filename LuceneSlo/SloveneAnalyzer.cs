@@ -14,10 +14,11 @@ namespace LuceneSlo
     {        
         public const int DEFAULT_MAX_TOKEN_LENGTH = 255;
         private int maxTokenLength = DEFAULT_MAX_TOKEN_LENGTH;        
-        public static readonly CharArraySet STOP_WORDS_SET = StopAnalyzer.ENGLISH_STOP_WORDS_SET;        
+        public static CharArraySet STOP_WORDS_SET = new CharArraySet(LuceneVersion.LUCENE_48, 0, true);        
         public SloveneAnalyzer(LuceneVersion matchVersion, CharArraySet stopWords)
             : base(matchVersion, stopWords)
         {
+            STOP_WORDS_SET = stopWords;
         }        
         public SloveneAnalyzer(LuceneVersion matchVersion)
             : this(matchVersion, STOP_WORDS_SET)
@@ -38,7 +39,7 @@ namespace LuceneSlo
             src.MaxTokenLength = maxTokenLength;
             TokenStream tok = new StandardFilter(m_matchVersion, src);
             tok = new LowerCaseFilter(m_matchVersion, tok);
-            tok = new StopFilter(m_matchVersion, tok, m_stopwords);
+            tok = new StopFilter(m_matchVersion, tok, STOP_WORDS_SET);
             tok = new SloveneLemmaFilter(tok);
             return new TokenStreamComponentsAnonymousInnerClassHelper(this, src, tok);
         }
