@@ -14,6 +14,8 @@ using Lucene.Net.Documents;
 using System.IO;
 using Lucene.Net.Analysis.Util;
 using Lucene.Net.QueryParsers.Classic;
+using Newtonsoft.Json;
+using JasonConverter;
 
 namespace Searcher
 {
@@ -55,30 +57,12 @@ namespace Searcher
             var indexConfig = new IndexWriterConfig(AppLuceneVersion, _analyzer);
             Writer = new IndexWriter(dir, indexConfig);
         }
-        static void AddIndex(string name, int index, string location)
+        static void AddIndex(string location)
         {
-            var predmet = Indexer.Predmet(location);
-            var sekcija = Indexer.Sekcija(predmet, index);
-            var vsebina = Indexer.Vsebina(sekcija);
-            var source = new
-            {
-                Name = name,
-                Text = vsebina,
-                Sekcija = sekcija.Title
-            };            
-            Document doc = new Document
-            {
-                new StringField("name",
-                    source.Name,
-                    Field.Store.YES),
-                new StringField("sekcija",
-                    source.Sekcija,
-                    Field.Store.YES),
-                new TextField("text",
-                    source.Text,
-                    Field.Store.YES),
-            };
-            Writer.AddDocument(doc);
+            var predmet = JsonConvert.DeserializeObject<Predmet>(System.IO.File.ReadAllText(location));
+            var indexer = new Indexer(Writer);
+            indexer.IndexPredmet(predmet);
+        
             Writer.Flush(triggerMerge: false, applyAllDeletes: false);
         }
         static void MassAddIndex(string directory)
