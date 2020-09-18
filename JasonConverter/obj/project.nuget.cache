@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "kPpQGAsPXlA00gjIqswwRsJQ7PV66mRv+PEni3qCSpGb5eK7w59gNgU/Z6cI3DXl+NRcuPEINKy2Xe8zG/kckA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\pa3ck\\Desktop\\pud\\Pud_project\\Searcher\\JasonConverter\\JasonConverter.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\pa3ck\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\pa3ck\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\pa3ck\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -13,13 +13,16 @@ using System.Threading.Tasks;
 using Lucene.Net.Documents;
 using System.IO;
 using Lucene.Net.Analysis.Util;
+using Lucene.Net.QueryParsers.Classic;
 
 namespace Searcher
 {
     class Program
     {
+        static LuceneVersion AppLuceneVersion = LuceneVersion.LUCENE_48;
         static IndexWriter Writer;
         static MultiPhraseQuery Search;
+        static SloveneAnalyzer _analyzer;
         public static System.Collections.Generic.Dictionary<string, string> Paths = new System.Collections.Generic.Dictionary<string, string>()
         {
             {"stopwords","resources/stopwords.txt"},
@@ -34,13 +37,12 @@ namespace Searcher
             MassAddIndex(Paths["DocumentsDir"]);
             while (true)
             {
-                SearchFor(Console.ReadLine());
-                Fetch();
+                var query = SearchFor(Console.ReadLine());
+                Fetch(query);
             }
         }
         static void Prepare() 
-        {
-            var AppLuceneVersion = LuceneVersion.LUCENE_48;
+        {            
             var indexLocation = Paths["indexDir"];
             var dir = FSDirectory.Open(indexLocation);
             String[] stopwords = ReadText(Paths["stopwords"]).Split('\n');
@@ -49,21 +51,28 @@ namespace Searcher
             {
                 stopwords2.Add(stopword);
             }
-            var analyzer = new SloveneAnalyzer(AppLuceneVersion, stopwords2);
-            var indexConfig = new IndexWriterConfig(AppLuceneVersion, analyzer);
+            _analyzer = new SloveneAnalyzer(AppLuceneVersion, stopwords2);
+            var indexConfig = new IndexWriterConfig(AppLuceneVersion, _analyzer);
             Writer = new IndexWriter(dir, indexConfig);
         }
-        static void AddIndex(string name, string text)
+        static void AddIndex(string name, int index, string location)
         {
+            var predmet = Indexer.Predmet(location);
+            var sekcija = Indexer.Sekcija(predmet, index);
+            var vsebina = Indexer.Vsebina(sekcija);
             var source = new
             {
                 Name = name,
-                Text = text
-            };
+                Text = vsebina,
+                Sekcija = sekcija.Title
+            };            
             Document doc = new Document
             {
                 new StringField("name",
                     source.Name,
+                    Field.Store.YES),
+                new StringField("sekcija",
+                    source.Sekcija,
                     Field.Store.YES),
                 new TextField("text",
                     source.Text,
@@ -94,29 +103,40 @@ namespace Searcher
                 Writer.AddDocument(doc);
                 Writer.Flush(triggerMerge: false, applyAllDeletes: false);
             }
+        }   
+
+        static Query SearchFor(string searchquery)
+        {
+            var qp = new QueryParser(AppLuceneVersion, "text", _analyzer);
+            return qp.Parse(searchquery);
         }
-        static void SearchFor(string searchquery)
+        /*
+        static Query MultiphaseSearchFor(string searchquery)
         {
             searchquery = Morf.Stemify(searchquery);
             string[] queries = searchquery.Split(' ');
             // search with a phrase
-            Search = new MultiPhraseQuery();
+            var mpq = new MultiPhraseQuery();
             foreach (string query in queries)
             {
                 Search.Add(new Term("text", query));
             }
-        }
-        static void Fetch()
+            return mpq;
+        }*/
+        static void Fetch(Query q)
         {
             // re-use the writer to get real-time updates
             var searcher = new IndexSearcher(Writer.GetReader(applyAllDeletes: true));
-            var hits = searcher.Search(Search, 20 /* top 20 */).ScoreDocs;
+            var hits = searcher.Search(q, 20 /* top 20 */).ScoreDocs;
             foreach (var hit in hits)
             {
                 var foundDoc = searcher.Doc(hit.Doc);
                 Console.WriteLine(foundDoc.Get("name"));
             }
+            
         }
+
+      
         static string ReadText(string file) 
         {
             string text = "";
