@@ -119,6 +119,9 @@ namespace Searcher
                 Console.WriteLine("-------------------------------------------------------------");
                 Console.WriteLine($"Predmet: {foundDoc.Get("predmet")}");
                 Console.WriteLine($"Tema: {foundDoc.Get("tema")}");
+                Console.WriteLine($"Sklop: {foundDoc.Get("sklop")}");
+                Console.WriteLine($"Podsklop: {foundDoc.Get("podkslop")}");
+                Console.WriteLine($"Naslov: {foundDoc.Get("sekcija")}");
                 Console.WriteLine("-------------------------------------------------------------");
             }
             

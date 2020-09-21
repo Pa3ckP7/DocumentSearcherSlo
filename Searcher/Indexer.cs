@@ -51,12 +51,12 @@ namespace Searcher
             //predmet.Teme.ForEach(tema => IndexTema(tema, predmet));
             foreach (var sekcija in predmet.Sekcije)
             {
-                IndexSekcija(sekcija, predmet, "");
+                IndexSekcija(sekcija, predmet, "","","");
             }
             //predmet.Sekcije.ForEach(sekcija => IndexSekcija(sekcija, predmet));
             foreach (var vsebina in predmet.Vsebine)
             {
-                IndexVsebina(vsebina, predmet, "predmet", predmet.Id.GetValueOrDefault(),"");
+                IndexVsebina(vsebina, predmet, "predmet", predmet.Id.GetValueOrDefault(),"","","","");
             }
             //predmet.Vsebine.ForEach(vsebina => IndexVsebina(vsebina, predmet,"predmet",predmet.Id.GetValueOrDefault()));
         }
@@ -70,11 +70,11 @@ namespace Searcher
             //tema.Sklopi.ForEach(sklop => IndexSklop(sklop, predmet));
             foreach (var sekcija in tema.Sekcije)
             {
-                IndexSekcija(sekcija, predmet, tema.Title);
+                IndexSekcija(sekcija, predmet, tema.Title,"","");
             }
             foreach (var vsebina in tema.Vsebine)
             {
-                IndexVsebina(vsebina, predmet, "tema", tema.Id, tema.Title);
+                IndexVsebina(vsebina, predmet, "tema", tema.Id, tema.Title,"","","");
             }
         }
 
@@ -82,33 +82,33 @@ namespace Searcher
         {
             foreach (var podsklop in sklop.Podsklopi)
             {
-                IndexPodSklop(podsklop, predmet, tema);
+                IndexPodSklop(podsklop, predmet, tema, sklop.Title);
             }
             foreach (var sekcija in sklop.Sekcije)
             {
-                IndexSekcija(sekcija, predmet, tema);
+                IndexSekcija(sekcija, predmet, tema, sklop.Title,"");
             }
             foreach (var vsebina in sklop.Vsebine)
             {
-                IndexVsebina(vsebina, predmet, "sklop", sklop.Id, tema);
+                IndexVsebina(vsebina, predmet, "sklop", sklop.Id, tema, sklop.Title,"","");
             }
         }
 
-        private void IndexPodSklop(Podsklop podsklop, Predmet predmet, string tema)
+        private void IndexPodSklop(Podsklop podsklop, Predmet predmet, string tema, string sklop)
         {                     
             foreach (var sekcija in podsklop.Sekcije)
             {
-                IndexSekcija(sekcija, predmet, tema);
+                IndexSekcija(sekcija, predmet, tema, sklop, podsklop.Title);
             }
             foreach (var vsebina in podsklop.Vsebine)
             {
-                IndexVsebina(vsebina, predmet, "podsklop", podsklop.Id, tema);
+                IndexVsebina(vsebina, predmet, "podsklop", podsklop.Id, tema, sklop, podsklop.Title,"");
             }
-            podsklop.Vsebine.ForEach(vsebina => IndexVsebina(vsebina, predmet, "podsklop", podsklop.Id, tema));
+            podsklop.Vsebine.ForEach(vsebina => IndexVsebina(vsebina, predmet, "podsklop", podsklop.Id, tema, sklop, podsklop.Title,""));
         }
 
 
-        private void IndexVsebina(Vsebina vsebina, Predmet predmet, string tip, int id,string tema)
+        private void IndexVsebina(Vsebina vsebina, Predmet predmet, string tip, int id,string tema, string sklop, string podsklop, string sekcija)
         {
             var text = string.Join("\n", vsebina.Text.Select(line => line.Text));
             var d = new Document();
@@ -119,16 +119,19 @@ namespace Searcher
             d.Add(new Int32Field("parentid", id, Field.Store.YES));
             d.Add(new Int32Field("predmetId", predmet.Id??1, Field.Store.YES));
             d.Add(new StringField("tema", tema, Field.Store.YES));
+            d.Add(new StringField("sklop", sklop, Field.Store.YES));
+            d.Add(new StringField("podsklop", podsklop, Field.Store.YES));
+            d.Add(new StringField("sekcija", sekcija, Field.Store.YES));
 
             _writer.AddDocument(d);
 
         }
 
-        private void IndexSekcija(Sekcija sekcija, Predmet predmet, string tema)
+        private void IndexSekcija(Sekcija sekcija, Predmet predmet, string tema, string sklop, string podsklop)
         {
             foreach (var vsebina in sekcija.Vsebine)
             {
-                IndexVsebina(vsebina, predmet, "sekcija", sekcija.Id, tema);
+                IndexVsebina(vsebina, predmet, "sekcija", sekcija.Id, tema, sklop, podsklop, sekcija.Title);
             }
         }
     }
