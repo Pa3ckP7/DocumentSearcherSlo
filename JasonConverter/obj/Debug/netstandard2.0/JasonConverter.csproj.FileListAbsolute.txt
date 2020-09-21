@@ -2,3 +2,10 @@ C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\JasonConverter\bin\Debug\netstan
 C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\JasonConverter\bin\Debug\netstandard2.0\JasonConverter.dll
 C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\JasonConverter\obj\Debug\netstandard2.0\JasonConverter.AssemblyInfoInputs.cache
 C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\JasonConverter\obj\Debug\netstandard2.0\JasonConverter.AssemblyInfo.cs
+C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\Output\netstandard2.0\JasonConverter.deps.json
+C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\Output\netstandard2.0\JasonConverter.dll
+C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\Output\netstandard2.0\JasonConverter.pdb
+C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\JasonConverter\obj\Debug\netstandard2.0\JasonConverter.csprojAssemblyReference.cache
+C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\JasonConverter\obj\Debug\netstandard2.0\JasonConverter.csproj.CoreCompileInputs.cache
+C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\JasonConverter\obj\Debug\netstandard2.0\JasonConverter.dll
+C:\Users\pa3ck\Desktop\pud\Pud_project\Searcher\JasonConverter\obj\Debug\netstandard2.0\JasonConverter.pdb

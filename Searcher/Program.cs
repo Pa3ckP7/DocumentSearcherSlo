@@ -36,7 +36,8 @@ namespace Searcher
         {
             Morf.Prepare(Paths["morfologija"], Paths["stopwords"]);
             Prepare();
-            MassAddIndex(Paths["DocumentsDir"]);
+            AddIndex($"{Paths["DocumentsDir"]}/Gimnazija.Slovenscina.json");
+            //MassAddIndex(Paths["DocumentsDir"]);
             while (true)
             {
                 var query = SearchFor(Console.ReadLine());
@@ -115,7 +116,10 @@ namespace Searcher
             foreach (var hit in hits)
             {
                 var foundDoc = searcher.Doc(hit.Doc);
-                Console.WriteLine(foundDoc.Get("name"));
+                Console.WriteLine("-------------------------------------------------------------");
+                Console.WriteLine($"Predmet: {foundDoc.Get("predmet")}");
+                Console.WriteLine($"Tema: {foundDoc.Get("tema")}");
+                Console.WriteLine("-------------------------------------------------------------");
             }
             
         }
