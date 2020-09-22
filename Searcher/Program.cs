@@ -25,7 +25,7 @@ namespace Searcher
         static IndexWriter Writer;
         static MultiPhraseQuery Search;
         static SloveneAnalyzer _analyzer;
-        public static System.Collections.Generic.Dictionary<string, string> Paths = new System.Collections.Generic.Dictionary<string, string>()
+        public static Dictionary<string, string> Paths = new Dictionary<string, string>()
         {
             {"stopwords","resources/stopwords.txt"},
             {"morfologija","resources/morfologija.txt"},
@@ -34,7 +34,7 @@ namespace Searcher
         };
         static void Main(string[] args)
         {
-            Morf.Prepare(Paths["morfologija"], Paths["stopwords"]);
+            Morf.Prepare(Paths["morfologija"], Paths["stopwords"], Paths["DocumentsDir"]);
             Prepare();
             AddIndex($"{Paths["DocumentsDir"]}/Gimnazija.Slovenscina.json");
             //MassAddIndex(Paths["DocumentsDir"]);
@@ -60,36 +60,35 @@ namespace Searcher
         }
         static void AddIndex(string location)
         {
-            var predmet = JsonConvert.DeserializeObject<Predmet>(System.IO.File.ReadAllText(location));
+            var predmet = JsonConvert.DeserializeObject<Predmet>(File.ReadAllText(location));
             var indexer = new Indexer(Writer);
             indexer.IndexPredmet(predmet);
         
             Writer.Flush(triggerMerge: false, applyAllDeletes: false);
         }
-        static void MassAddIndex(string directory)
-        {
-            string[] filenames = System.IO.Directory.GetFiles(directory,"*",SearchOption.TopDirectoryOnly);
-            for (int i = 0; i < filenames.Length; i++) 
-            {
-                var source = new
-                {
-                    Name = Path.GetFileName(filenames[i]),
-                    Text = ReadText(filenames[i])
-                };
-                Document doc = new Document
-                {
-                    new StringField("name",
-                        source.Name,
-                        Field.Store.YES),
-                    new TextField("text",
-                        source.Text,
-                        Field.Store.YES),
-                };
-                Writer.AddDocument(doc);
-                Writer.Flush(triggerMerge: false, applyAllDeletes: false);
-            }
-        }   
-
+        //static void MassAddIndex(string directory)
+        //{
+        //    string[] filenames = System.IO.Directory.GetFiles(directory,"*",SearchOption.TopDirectoryOnly);
+        //    for (int i = 0; i < filenames.Length; i++) 
+        //    {
+        //        var source = new
+        //        {
+        //            Name = Path.GetFileName(filenames[i]),
+        //            Text = ReadText(filenames[i])
+        //        };
+        //        Document doc = new Document
+        //        {
+        //            new StringField("name",
+        //                source.Name,
+        //                Field.Store.YES),
+        //            new TextField("text",
+        //                source.Text,
+        //                Field.Store.YES),
+        //        };
+        //        Writer.AddDocument(doc);
+        //        Writer.Flush(triggerMerge: false, applyAllDeletes: false);
+        //    }
+        //}   
         static Query SearchFor(string searchquery)
         {
             var qp = new QueryParser(AppLuceneVersion, "text", _analyzer);
@@ -125,10 +124,8 @@ namespace Searcher
                 Console.WriteLine("-------------------------------------------------------------");
             }
             
-        }
-
-      
-        static string ReadText(string file) 
+        }      
+        public static string ReadText(string file) 
         {
             string text = "";
             using (var pfs = File.OpenRead(file))
