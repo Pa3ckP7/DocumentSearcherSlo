@@ -121,7 +121,7 @@ namespace Searcher
             d.Add(new StringField("tema", tema.ToLower(), Field.Store.YES));
             d.Add(new StringField("sklop", sklop.ToLower(), Field.Store.YES));
             d.Add(new StringField("podsklop", podsklop.ToLower(), Field.Store.YES));
-            d.Add(new StringField("sekcija", sekcija.ToLower(), Field.Store.YES));
+            d.Add(new StringField("naslov", sekcija.ToLower(), Field.Store.YES));
 
             _writer.AddDocument(d);
 
