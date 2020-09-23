@@ -44,6 +44,7 @@ namespace Searcher
                 Console.Write("Search: ");
                 var query = SearchFor(Console.ReadLine());
                 Console.WriteLine("");
+                Console.Clear();
                 Fetch(query);
             }
         }

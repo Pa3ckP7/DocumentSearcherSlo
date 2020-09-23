@@ -52,7 +52,7 @@ namespace Morfer
                 string str = line.Text.Trim();
                 if (str.Length > 0) 
                 {
-                    text += str;
+                    text += str.ToLower();
                 }
             });
         }

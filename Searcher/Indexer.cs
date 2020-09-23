@@ -112,16 +112,16 @@ namespace Searcher
         {
             var text = string.Join("\n", vsebina.Text.Select(line => line.Text));
             var d = new Document();
-            d.Add(new TextField("text", text, Field.Store.YES));
+            d.Add(new TextField("text", text.ToLower(), Field.Store.YES));
             d.Add(new Int32Field("id", vsebina.Id, Field.Store.YES));
-            d.Add(new StringField("predmet", predmet.Title, Field.Store.YES));
-            d.Add(new StringField("tip", tip, Field.Store.YES));
+            d.Add(new StringField("predmet", predmet.Title.ToLower(), Field.Store.YES));
+            d.Add(new StringField("tip", tip.ToLower(), Field.Store.YES));
             d.Add(new Int32Field("parentid", id, Field.Store.YES));
             d.Add(new Int32Field("predmetId", predmet.Id??1, Field.Store.YES));
-            d.Add(new StringField("tema", tema, Field.Store.YES));
-            d.Add(new StringField("sklop", sklop, Field.Store.YES));
-            d.Add(new StringField("podsklop", podsklop, Field.Store.YES));
-            d.Add(new StringField("sekcija", sekcija, Field.Store.YES));
+            d.Add(new StringField("tema", tema.ToLower(), Field.Store.YES));
+            d.Add(new StringField("sklop", sklop.ToLower(), Field.Store.YES));
+            d.Add(new StringField("podsklop", podsklop.ToLower(), Field.Store.YES));
+            d.Add(new StringField("sekcija", sekcija.ToLower(), Field.Store.YES));
 
             _writer.AddDocument(d);
 
