@@ -34,13 +34,16 @@ namespace Searcher
         };
         static void Main(string[] args)
         {
+            Console.Write("Preparing...");
             Morf.Prepare(Paths["morfologija"], Paths["stopwords"], Paths["DocumentsDir"]);
             Prepare();
-            AddIndex($"{Paths["DocumentsDir"]}/Gimnazija.Slovenscina.json");
-            //MassAddIndex(Paths["DocumentsDir"]);
+            MassAddIndex(Paths["DocumentsDir"]);
+            Console.Write("Done\n");
             while (true)
             {
+                Console.Write("Search: ");
                 var query = SearchFor(Console.ReadLine());
+                Console.WriteLine("");
                 Fetch(query);
             }
         }
@@ -63,32 +66,19 @@ namespace Searcher
             var predmet = JsonConvert.DeserializeObject<Predmet>(File.ReadAllText(location));
             var indexer = new Indexer(Writer);
             indexer.IndexPredmet(predmet);
-        
             Writer.Flush(triggerMerge: false, applyAllDeletes: false);
         }
-        //static void MassAddIndex(string directory)
-        //{
-        //    string[] filenames = System.IO.Directory.GetFiles(directory,"*",SearchOption.TopDirectoryOnly);
-        //    for (int i = 0; i < filenames.Length; i++) 
-        //    {
-        //        var source = new
-        //        {
-        //            Name = Path.GetFileName(filenames[i]),
-        //            Text = ReadText(filenames[i])
-        //        };
-        //        Document doc = new Document
-        //        {
-        //            new StringField("name",
-        //                source.Name,
-        //                Field.Store.YES),
-        //            new TextField("text",
-        //                source.Text,
-        //                Field.Store.YES),
-        //        };
-        //        Writer.AddDocument(doc);
-        //        Writer.Flush(triggerMerge: false, applyAllDeletes: false);
-        //    }
-        //}   
+        static void MassAddIndex(string directory)
+        {
+            string[] filenames = System.IO.Directory.GetFiles(directory, "*.json", SearchOption.AllDirectories);
+            foreach (var filename in filenames)
+            {
+                var predmet = JsonConvert.DeserializeObject<Predmet>(File.ReadAllText(filename));
+                var indexer = new Indexer(Writer);
+                indexer.IndexPredmet(predmet);
+                Writer.Flush(triggerMerge: false, applyAllDeletes: false);
+            }
+        }
         static Query SearchFor(string searchquery)
         {
             var qp = new QueryParser(AppLuceneVersion, "text", _analyzer);
