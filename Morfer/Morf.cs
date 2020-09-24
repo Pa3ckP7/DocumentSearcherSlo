@@ -13,7 +13,7 @@ namespace Morfer
 
         public static void Prepare() 
         {
-            using (var fd = File.OpenRead("resources/dictionary.txt"))
+            using (var fd = File.OpenRead("resources/dictionary"))
             using (var srd = new StreamReader(fd)) 
             {
                 while (!srd.EndOfStream) 
@@ -32,8 +32,8 @@ namespace Morfer
             {
                 JsonReader jr= new JsonReader();
                 string text=jr.Read(JsonConvert.DeserializeObject<Predmet>(File.ReadAllText(file)));
-                Regex.Replace(text, @"[\W ]", "");
-                Regex.Replace(text, @"[\d]", "");
+                text = Regex.Replace(text, @"[^\w ]", "");
+                text = Regex.Replace(text, @"[\d]", "");
                 string[] textw=text.Split(' ');
                 foreach (string word in textw) 
                 {
@@ -55,7 +55,7 @@ namespace Morfer
                 }
             }
             //stores the dictionary for later use
-            using (StreamWriter file = new StreamWriter("resources/dictionary.txt")) 
+            using (StreamWriter file = new StreamWriter("resources/dictionary")) 
             {
                 foreach (var entry in Stems) 
                 {

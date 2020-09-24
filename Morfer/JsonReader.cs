@@ -16,7 +16,7 @@ namespace Morfer
         {
             text = "";
             ReadPredmet(predmet);
-            return "";
+            return text;
         }
         private void ReadPredmet(Predmet predmet) 
         {
