@@ -34,10 +34,20 @@ namespace Searcher
         };
         static void Main(string[] args)
         {
+            Console.WriteLine("Do you want to re-index all the documents [y/n] default=no (REQUIRED FOR 1ST BOOT)");
+            string reindex = Console.ReadLine();
             Console.Write("Preparing...");
-            Morf.Prepare(Paths["morfologija"], Paths["stopwords"], Paths["DocumentsDir"]);
-            Prepare();
-            MassAddIndex(Paths["DocumentsDir"]);
+            if (reindex.Equals("y"))
+            {
+                Morf.Reindex(Paths["morfologija"], Paths["stopwords"], Paths["DocumentsDir"]);
+                Prepare();
+                MassAddIndex(Paths["DocumentsDir"]);
+            }
+            else 
+            {
+                Morf.Prepare();
+                Prepare();
+            }
             Console.Write("Done\n");
             while (true)
             {

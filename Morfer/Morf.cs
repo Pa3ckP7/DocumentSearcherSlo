@@ -11,7 +11,20 @@ namespace Morfer
     {
         private static Dictionary<string, string> Stems = new Dictionary<string, string>();
 
-        public static void Prepare(String morfology, String stopwords, String docdir) 
+        public static void Prepare() 
+        {
+            using (var fd = File.OpenRead("resources/dictionary.txt"))
+            using (var srd = new StreamReader(fd)) 
+            {
+                while (!srd.EndOfStream) 
+                {
+                    string entry = srd.ReadLine();
+                    string[] data = entry.Split(' ');
+                    Stems.Add(data[0], data[1]);
+                }
+            }
+        }
+        public static void Reindex(String morfology, String stopwords, String docdir) 
         {
             string[] filenames = Directory.GetFiles(docdir, "*.json", SearchOption.AllDirectories);
             HashSet<string> words= new HashSet<string>();
@@ -39,6 +52,14 @@ namespace Morfer
                     {
                         if (!Stems.ContainsKey(arr[0])&& words.Contains(arr[0])) Stems[arr[0]] = arr[1];
                     }
+                }
+            }
+            //stores the dictionary for later use
+            using (StreamWriter file = new StreamWriter("resources/dictionary.txt")) 
+            {
+                foreach (var entry in Stems) 
+                {
+                    file.WriteLine($"{entry.Key} {entry.Value}");
                 }
             }
         }

@@ -41,7 +41,6 @@ namespace Searcher
         //    }
         //    return returnvalue;
         //}
-
         public void IndexPredmet(Predmet predmet)
         {
             foreach(var tema in predmet.Teme)
@@ -60,7 +59,6 @@ namespace Searcher
             }
             //predmet.Vsebine.ForEach(vsebina => IndexVsebina(vsebina, predmet,"predmet",predmet.Id.GetValueOrDefault()));
         }
-
         private void IndexTema(Tema tema, Predmet predmet)
         {
             foreach (var sklop in tema.Sklopi)
@@ -77,7 +75,6 @@ namespace Searcher
                 IndexVsebina(vsebina, predmet, "tema", tema.Id, tema.Title,"","","");
             }
         }
-
         private void IndexSklop(Sklop sklop, Predmet predmet, string tema)
         {
             foreach (var podsklop in sklop.Podsklopi)
@@ -93,7 +90,6 @@ namespace Searcher
                 IndexVsebina(vsebina, predmet, "sklop", sklop.Id, tema, sklop.Title,"","");
             }
         }
-
         private void IndexPodSklop(Podsklop podsklop, Predmet predmet, string tema, string sklop)
         {                     
             foreach (var sekcija in podsklop.Sekcije)
@@ -106,8 +102,6 @@ namespace Searcher
             }
             podsklop.Vsebine.ForEach(vsebina => IndexVsebina(vsebina, predmet, "podsklop", podsklop.Id, tema, sklop, podsklop.Title,""));
         }
-
-
         private void IndexVsebina(Vsebina vsebina, Predmet predmet, string tip, int id,string tema, string sklop, string podsklop, string sekcija)
         {
             var text = string.Join("\n", vsebina.Text.Select(line => line.Text));
@@ -126,7 +120,6 @@ namespace Searcher
             _writer.AddDocument(d);
 
         }
-
         private void IndexSekcija(Sekcija sekcija, Predmet predmet, string tema, string sklop, string podsklop)
         {
             foreach (var vsebina in sekcija.Vsebine)
